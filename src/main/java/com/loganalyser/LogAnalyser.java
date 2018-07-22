@@ -28,13 +28,20 @@ public class LogAnalyser {
         for (Map.Entry<String, List<LogEntryItem>> user : tempDataStore.entrySet()) {
             List tempLogList = new ArrayList<String>();
             for (int i = 0; i <= user.getValue().size() - SEQUENTIAL_PAGE_COUNT; i++){
-                Map<String, List<String>> tempList = subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT).stream().collect(Collectors.groupingBy(LogEntryItem::getUser,Collectors.mapping(LogEntryItem::getPage,Collectors.toList())));
-                tempLogList.add(tempList.get(user.getKey()));
+                Map<String, List<String>> tempPageList = subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT)
+                                                     .stream().collect(Collectors.groupingBy(
+                                                        LogEntryItem::getUser,
+                                                        Collectors.mapping(LogEntryItem::getPage, Collectors.toList()))
+                                                     );
+                tempLogList.add(tempPageList.get(user.getKey()));
             }
             sequentialPages.put(user.getKey(), tempLogList);
         }
     
-        
+        Object test = sequentialPages.entrySet().stream().collect(Collectors.toMap(o -> o.getKey(), e -> doProcess(e.getValue())));
+        Object testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
+        Object testDistinct = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).distinct().collect(Collectors.toList());
+    
         //work directly with stream, doesn't need to be an ArrayList.
         //https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line
         Stream<Student> studs = Stream.of(
@@ -47,6 +54,9 @@ public class LogAnalyser {
         System.out.println(map);
     }
     
+    private static String doProcess(List list){
+        return list.toString() + ":" + list.hashCode();
+    }
   
     private static LogEntryList populateSampleData(){
         List logItemList = Arrays.asList(
