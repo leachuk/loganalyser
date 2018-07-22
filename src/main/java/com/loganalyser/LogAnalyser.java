@@ -24,11 +24,12 @@ public class LogAnalyser {
         Map<String, List<LogEntryItem>> tempDataStore = sampleLogData.stream().collect(Collectors.groupingBy(LogEntryItem::getUser, TreeMap::new, Collectors.toList()));
         
         //get 3-page view groups
-        Map<String, List<LogEntryList>> sequentialPages = new TreeMap<>();
+        Map<String, List<List<String>>> sequentialPages = new TreeMap<>();
         for (Map.Entry<String, List<LogEntryItem>> user : tempDataStore.entrySet()) {
-            List<LogEntryList> tempLogList = new ArrayList<>();
+            List tempLogList = new ArrayList<String>();
             for (int i = 0; i <= user.getValue().size() - SEQUENTIAL_PAGE_COUNT; i++){
-                tempLogList.add(new LogEntryList(subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT)));
+                Map<String, List<String>> tempList = subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT).stream().collect(Collectors.groupingBy(LogEntryItem::getUser,Collectors.mapping(LogEntryItem::getPage,Collectors.toList())));
+                tempLogList.add(tempList.get(user.getKey()));
             }
             sequentialPages.put(user.getKey(), tempLogList);
         }
@@ -78,7 +79,7 @@ public class LogAnalyser {
         System.out.println("===========================================");
     }
     
-    private static List<LogEntryItem> subList(List<LogEntryItem> list, int fromIndex, int returnListSize) {
+    private static <T> List<T> subList(List<T> list, int fromIndex, int returnListSize) {
         int size = list.size();
         if (fromIndex >= size || returnListSize <= 0 || fromIndex + returnListSize > size) {
             return Collections.emptyList();
