@@ -3,7 +3,9 @@ package com.loganalyser;
 import com.loganalyser.logmodel.LogEntryItem;
 import com.loganalyser.logmodel.LogEntryList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,14 +13,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LogAnalyser {
+    private static final int SEQUENTIAL_PAGE_COUNT = 3;
     
     public static void main(String[] args) {
         System.out.println("Welcome to the Log Analyser");
     
         List<LogEntryItem> sampleLogData = populateSampleData().getLogEntryList();
     
+        //group pages by user
         Map<String, List<LogEntryItem>> tempDataStore = sampleLogData.stream().collect(Collectors.groupingBy(LogEntryItem::getUser, TreeMap::new, Collectors.toList()));
-        //tempDataStore = sampleLogData.getLogEntryList().stream().collect(Collectors.groupingBy(LogEntryItem::getUser,Collectors.groupingBy(LogEntryItem::getPage)));
+        
+        //get 3-page view groups
+        Map<String, List<LogEntryList>> sequentialPages = new TreeMap<>();
+        for (Map.Entry<String, List<LogEntryItem>> user : tempDataStore.entrySet()) {
+            List<LogEntryList> tempLogList = new ArrayList<>();
+            for (int i = 0; i <= user.getValue().size() - SEQUENTIAL_PAGE_COUNT; i++){
+                tempLogList.add(new LogEntryList(subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT)));
+            }
+            sequentialPages.put(user.getKey(), tempLogList);
+        }
+    
         
         //work directly with stream, doesn't need to be an ArrayList.
         //https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line
@@ -62,6 +76,18 @@ public class LogAnalyser {
             System.out.println("["+ i +"] " + transactions.get(i));
         }
         System.out.println("===========================================");
+    }
+    
+    private static List<LogEntryItem> subList(List<LogEntryItem> list, int fromIndex, int returnListSize) {
+        int size = list.size();
+        if (fromIndex >= size || returnListSize <= 0 || fromIndex + returnListSize > size) {
+            return Collections.emptyList();
+        }
+        
+        fromIndex = Math.max(0, fromIndex);
+        returnListSize = Math.min(size, returnListSize);
+        
+        return list.subList(fromIndex, fromIndex + returnListSize);
     }
     
 }

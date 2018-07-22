@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LogEntryList {
-	List logEntryList = new ArrayList<LogEntryItem>();
+	List logEntryList = new ArrayList<>();
 	
 	public LogEntryList(List logEntryList) {
 		this.logEntryList = logEntryList;
