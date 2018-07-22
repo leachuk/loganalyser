@@ -1,11 +1,9 @@
 package com.loganalyser.logmodel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LogEntryList {
-	List logEntryList = new ArrayList<>();
-	private int occurrences;
+	List<String> logEntryList;
 	
 	public LogEntryList(List logEntryList) {
 		this.logEntryList = logEntryList;
@@ -17,13 +15,5 @@ public class LogEntryList {
 	
 	public void setLogEntryList(List logEntryList) {
 		this.logEntryList = logEntryList;
-	}
-	
-	public int getOccurrences() {
-		return occurrences;
-	}
-	
-	public void setOccurrences(int occurrences) {
-		this.occurrences = occurrences;
 	}
 }

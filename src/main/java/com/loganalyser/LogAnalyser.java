@@ -1,14 +1,10 @@
 package com.loganalyser;
 
+import com.loganalyser.logmodel.Log;
 import com.loganalyser.logmodel.LogEntryItem;
 import com.loganalyser.logmodel.LogEntryList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,11 +35,25 @@ public class LogAnalyser {
         }
     
         Object test = sequentialPages.entrySet().stream().collect(Collectors.toMap(o -> o.getKey(), e -> doProcess(e.getValue())));
-        List testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
+        List<List<String>> testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
         Object testDistinct = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).distinct().collect(Collectors.toList());
     
         Object testSize = testFlatMap.stream().collect(Collectors.groupingBy(o -> o.toString()));
-        
+
+        //oldschool loop to get duplicate count
+        Map<Integer, Log> logMap = new HashMap<>();
+        for (List itemList : testFlatMap) {
+            if (!logMap.containsKey(itemList.hashCode())) {
+                LogEntryList logEntryList = new LogEntryList(itemList);
+                Log log = new Log(logEntryList);
+                log.setOccurrences(1);
+                logMap.put(itemList.hashCode(), log);
+            } else {
+                Log existingLog = logMap.get(itemList.hashCode());
+                existingLog.setOccurrences(existingLog.getOccurrences() + 1);
+            }
+        }
+
         //work directly with stream, doesn't need to be an ArrayList.
         //https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line
         Stream<Student> studs = Stream.of(
