@@ -39,9 +39,11 @@ public class LogAnalyser {
         }
     
         Object test = sequentialPages.entrySet().stream().collect(Collectors.toMap(o -> o.getKey(), e -> doProcess(e.getValue())));
-        Object testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
+        List testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
         Object testDistinct = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).distinct().collect(Collectors.toList());
     
+        Object testSize = testFlatMap.stream().collect(Collectors.groupingBy(o -> o.toString()));
+        
         //work directly with stream, doesn't need to be an ArrayList.
         //https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line
         Stream<Student> studs = Stream.of(
