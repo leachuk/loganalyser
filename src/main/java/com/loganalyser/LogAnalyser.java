@@ -61,6 +61,11 @@ public class LogAnalyser {
                 .limit(10)
                 .collect(Collectors.toList());
 
+        for (int i=0; i < ordered.size(); i++) {
+            Log log = ((HashMap.Entry<Integer, Log>) ordered.get(i)).getValue();
+            System.out.println(log.getPageJourney().printList());
+        }
+
         System.out.println("Completed Log Analyser");
     }
 
