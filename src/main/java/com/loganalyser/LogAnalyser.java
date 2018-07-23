@@ -58,6 +58,7 @@ public class LogAnalyser {
         List ordered = logMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue((o1, o2) -> o2.getOccurrences().compareTo(o1.getOccurrences())))
+                .limit(10)
                 .collect(Collectors.toList());
 
         System.out.println("Completed Log Analyser");
