@@ -55,39 +55,18 @@ public class LogAnalyser {
         }
 
         //output top 2 journeys by occurrence
-        List<Map.Entry<Integer, Log>>  ordered = logMap.entrySet()
+        List ordered = logMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue((o1, o2) -> o2.getOccurrences().compareTo(o1.getOccurrences())))
                 .collect(Collectors.toList());
 
-        Map<String, Integer> map = new HashMap<>();
-        map.put("Kawasaki", 3);
-        map.put("Honda", 1);
-        map.put("Norton", 5);
-        map.put("Moto Guzzi", 2);
-
-        List<Map.Entry<String, Integer>> comparingByValue = map
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toList());
-
-        //work directly with stream, doesn't need to be an ArrayList.
-        //https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line
-        Stream<Student> studs = Stream.of(
-            new Student("1726", "John", "New York"),
-            new Student("4321", "Max", "California"),
-            new Student("2234", "Max", "Los Angeles"),
-            new Student("7765", "Sam", "California")
-        );
-        Map<String, Map<String, List<Student>>> map2 = studs.collect(Collectors.groupingBy(Student::getStud_name,Collectors.groupingBy(Student::getStud_location)));
-        System.out.println(map2);
+        System.out.println("Completed Log Analyser");
     }
-    
+
     private static String doProcess(List list){
         return list.toString() + ":" + list.hashCode();
     }
-  
+
     private static LogEntryList populateSampleData(){
         List logItemList = Arrays.asList(
             new LogEntryItem("user1", "/"),
@@ -107,7 +86,7 @@ public class LogAnalyser {
             new LogEntryItem("user5", "login"),
             new LogEntryItem("user5", "subscriber")
         );
-        
+
         return new LogEntryList(logItemList);
     }
 
@@ -118,46 +97,17 @@ public class LogAnalyser {
         }
         System.out.println("===========================================");
     }
-    
+
     private static <T> List<T> subList(List<T> list, int fromIndex, int returnListSize) {
         int size = list.size();
         if (fromIndex >= size || returnListSize <= 0 || fromIndex + returnListSize > size) {
             return Collections.emptyList();
         }
-        
+
         fromIndex = Math.max(0, fromIndex);
         returnListSize = Math.min(size, returnListSize);
-        
+
         return list.subList(fromIndex, fromIndex + returnListSize);
     }
-    
-}
 
-class Student {
-    
-    String stud_id;
-    String stud_name;
-    String stud_location;
-    
-    public String getStud_id() {
-        return stud_id;
-    }
-    
-    public String getStud_name() {
-        return stud_name;
-    }
-    
-    public String getStud_location() {
-        return stud_location;
-    }
-    
-    
-    
-    Student(String sid, String sname, String slocation) {
-        
-        this.stud_id = sid;
-        this.stud_name = sname;
-        this.stud_location = slocation;
-        
-    }
 }
