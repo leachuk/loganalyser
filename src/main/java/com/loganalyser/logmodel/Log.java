@@ -2,7 +2,7 @@ package com.loganalyser.logmodel;
 
 public class Log {
     LogEntryList pageJourney;
-    int occurrences;
+    Integer occurrences;
 
     public Log(LogEntryList pageJourney) {
         this.pageJourney = pageJourney;
@@ -16,7 +16,7 @@ public class Log {
         this.pageJourney = pageJourney;
     }
 
-    public int getOccurrences() {
+    public Integer getOccurrences() {
         return occurrences;
     }
 

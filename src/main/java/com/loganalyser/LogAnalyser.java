@@ -54,6 +54,24 @@ public class LogAnalyser {
             }
         }
 
+        //output top 2 journeys by occurrence
+        List<Map.Entry<Integer, Log>>  ordered = logMap.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue((o1, o2) -> o2.getOccurrences().compareTo(o1.getOccurrences())))
+                .collect(Collectors.toList());
+
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Kawasaki", 3);
+        map.put("Honda", 1);
+        map.put("Norton", 5);
+        map.put("Moto Guzzi", 2);
+
+        List<Map.Entry<String, Integer>> comparingByValue = map
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toList());
+
         //work directly with stream, doesn't need to be an ArrayList.
         //https://stackoverflow.com/questions/1005073/initialization-of-an-arraylist-in-one-line
         Stream<Student> studs = Stream.of(
@@ -62,8 +80,8 @@ public class LogAnalyser {
             new Student("2234", "Max", "Los Angeles"),
             new Student("7765", "Sam", "California")
         );
-        Map<String, Map<String, List<Student>>> map = studs.collect(Collectors.groupingBy(Student::getStud_name,Collectors.groupingBy(Student::getStud_location)));
-        System.out.println(map);
+        Map<String, Map<String, List<Student>>> map2 = studs.collect(Collectors.groupingBy(Student::getStud_name,Collectors.groupingBy(Student::getStud_location)));
+        System.out.println(map2);
     }
     
     private static String doProcess(List list){

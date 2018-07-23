@@ -16,4 +16,5 @@ public class LogEntryList {
 	public void setLogEntryList(List logEntryList) {
 		this.logEntryList = logEntryList;
 	}
+
 }
