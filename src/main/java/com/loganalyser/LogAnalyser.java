@@ -25,7 +25,7 @@ public class LogAnalyser {
         List<Map.Entry<Integer, Log>> ordered = logProcessor.getOrderedList();
 
         for (Map.Entry<Integer, Log> map : ordered) {
-            System.out.println(map.getValue().getPageJourney().printList() + String.format("\t[%d]", map.getValue().getOccurrences()));
+            System.out.println(map.getValue().getPageJourney().printList() + String.format(" #[%d]", map.getValue().getOccurrences()));
         }
 
         System.out.println("================== Completed Log Analyser ==================");

@@ -8,7 +8,7 @@ From a console within this root project directory.
 
 ```
 mvn clean package
-java -jar target/log-anaylser-0.0.1-SNAPSHOT.jar
+java -jar target/log-analyser-0.0.1-SNAPSHOT.jar
 ```
 
 
