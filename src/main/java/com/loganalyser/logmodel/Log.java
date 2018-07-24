@@ -11,11 +11,7 @@ public class Log {
     public LogEntryList getPageJourney() {
         return pageJourney;
     }
-
-    public void setPageJourney(LogEntryList pageJourney) {
-        this.pageJourney = pageJourney;
-    }
-
+    
     public Integer getOccurrences() {
         return occurrences;
     }
