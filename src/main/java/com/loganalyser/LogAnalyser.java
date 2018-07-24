@@ -62,7 +62,7 @@ public class LogAnalyser {
                 .collect(Collectors.toList());
 
         for (Map.Entry<Integer, Log> map : ordered) {
-            System.out.println(map.getValue().getPageJourney().printList());
+            System.out.println(map.getValue().getPageJourney().printList() + String.format("[%d]", map.getValue().getOccurrences()));
         }
 
         System.out.println("Completed Log Analyser");
