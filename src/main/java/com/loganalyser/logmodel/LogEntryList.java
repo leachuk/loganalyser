@@ -1,27 +1,27 @@
 package com.loganalyser.logmodel;
 
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class LogEntryList {
-	Stream<String> logEntryList;
+	List<String> logEntryList;
 	
-	public LogEntryList(Stream<String>  logEntryList) {
+	public LogEntryList(List logEntryList) {
 		this.logEntryList = logEntryList;
 	}
 	
-	public Stream<String>  getLogEntryList() {
+	public List getLogEntryList() {
 		return logEntryList;
 	}
 	
-	public void setLogEntryList(Stream<String> logEntryList) {
+	public void setLogEntryList(List logEntryList) {
 		this.logEntryList = logEntryList;
 	}
 
 	public String printList() {
-		String result = this.getLogEntryList()
-							.map(o -> String.valueOf(o))
-							.collect(Collectors.joining(" -> ", "(", ")"));
+		String result = this.getLogEntryList().stream()
+						.map(o -> String.valueOf(o))
+						.collect(Collectors.joining(" -> ", "(", ")")).toString();
 
 		return result;
 	}

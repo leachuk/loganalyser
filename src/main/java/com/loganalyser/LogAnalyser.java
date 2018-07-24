@@ -13,9 +13,9 @@ public class LogAnalyser {
     
     public static void main(String[] args) {
         System.out.println("Welcome to the Log Analyser");
-    
-        //group pages by user
-        Map<String, List<LogEntryItem>> tempDataStore = getSampleData().getLogEntryList().collect(Collectors.groupingBy(LogEntryItem::getUser));
+
+         //group pages by user
+        Map<String, List<LogEntryItem>> tempDataStore = getSampleData().collect(Collectors.groupingBy(LogEntryItem::getUser));
         
         //get 3-page view groups
         Map<String, List<List<String>>> sequentialPages = new TreeMap<>();
@@ -70,8 +70,8 @@ public class LogAnalyser {
         return list.toString() + ":" + list.hashCode();
     }
 
-    private static LogEntryList getSampleData(){
-        Stream logItemList = Stream.of(
+    private static Stream<LogEntryItem> getSampleData(){
+        Stream<LogEntryItem> logItemList = Stream.of(
             new LogEntryItem("user1", "/"),
             new LogEntryItem("user1", "login"),
             new LogEntryItem("user1", "subscriber"),
@@ -90,7 +90,7 @@ public class LogAnalyser {
             new LogEntryItem("user5", "subscriber")
         );
 
-        return new LogEntryList(logItemList);
+        return logItemList;
     }
 
     private static void printToConsole(List<String> transactions) {
