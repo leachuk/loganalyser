@@ -18,39 +18,50 @@ public class LogAnalyser {
         Map<String, List<LogEntryItem>> tempDataStore = getSampleData().collect(Collectors.groupingBy(LogEntryItem::getUser));
         
         //get 3-page view groups
-        Map<String, List<List<String>>> sequentialPages = new TreeMap<>();
+        //Map<String, List<List<String>>> sequentialPages = new TreeMap<>();
+        Map<Integer, Log> logMap = new HashMap<>();
         for (Map.Entry<String, List<LogEntryItem>> user : tempDataStore.entrySet()) {
-            List tempLogList = new ArrayList<String>();
+            //List tempLogList = new ArrayList<String>();
             for (int i = 0; i <= user.getValue().size() - SEQUENTIAL_PAGE_COUNT; i++){
                 Map<String, List<String>> tempPageList = subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT)
-                                                     .stream().collect(Collectors.groupingBy(
-                                                        LogEntryItem::getUser,
-                                                        Collectors.mapping(LogEntryItem::getPage, Collectors.toList()))
-                                                     );
-                tempLogList.add(tempPageList.get(user.getKey()));
+                                                         .stream()
+                                                         .collect(Collectors.groupingBy(LogEntryItem::getUser,
+                                                            Collectors.mapping(LogEntryItem::getPage, Collectors.toList())));
+               
+                if (!logMap.containsKey(tempPageList.get(user.getKey()).hashCode())) {
+                    LogEntryList logEntryList = new LogEntryList(tempPageList.get(user.getKey()));
+                    Log log = new Log(logEntryList);
+                    log.setOccurrences(1);
+                    logMap.put(tempPageList.get(user.getKey()).hashCode(), log);
+                } else {
+                    Log existingLog = logMap.get(tempPageList.get(user.getKey()).hashCode());
+                    existingLog.setOccurrences(existingLog.getOccurrences() + 1);
+                }
+                
+                //tempLogList.add(tempPageList.get(user.getKey()));
             }
-            sequentialPages.put(user.getKey(), tempLogList);
+            //sequentialPages.put(user.getKey(), tempLogList);
         }
     
-        Object test = sequentialPages.entrySet().stream().collect(Collectors.toMap(o -> o.getKey(), e -> doProcess(e.getValue())));
-        List<List<String>> testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
-        Object testDistinct = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).distinct().collect(Collectors.toList());
+        //Object test = sequentialPages.entrySet().stream().collect(Collectors.toMap(o -> o.getKey(), e -> doProcess(e.getValue())));
+        //List<List<String>> testFlatMap = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).collect(Collectors.toList());
+        //Object testDistinct = sequentialPages.entrySet().stream().flatMap(o -> o.getValue().stream()).distinct().collect(Collectors.toList());
     
-        Object testSize = testFlatMap.stream().collect(Collectors.groupingBy(o -> o.toString()));
+        //Object testSize = testFlatMap.stream().collect(Collectors.groupingBy(o -> o.toString()));
 
         //oldschool loop to get duplicate count
-        Map<Integer, Log> logMap = new HashMap<>();
-        for (List itemList : testFlatMap) {
-            if (!logMap.containsKey(itemList.hashCode())) {
-                LogEntryList logEntryList = new LogEntryList(itemList);
-                Log log = new Log(logEntryList);
-                log.setOccurrences(1);
-                logMap.put(itemList.hashCode(), log);
-            } else {
-                Log existingLog = logMap.get(itemList.hashCode());
-                existingLog.setOccurrences(existingLog.getOccurrences() + 1);
-            }
-        }
+//        Map<Integer, Log> logMap = new HashMap<>();
+//        for (List itemList : testFlatMap) {
+//            if (!logMap.containsKey(itemList.hashCode())) {
+//                LogEntryList logEntryList = new LogEntryList(itemList);
+//                Log log = new Log(logEntryList);
+//                log.setOccurrences(1);
+//                logMap.put(itemList.hashCode(), log);
+//            } else {
+//                Log existingLog = logMap.get(itemList.hashCode());
+//                existingLog.setOccurrences(existingLog.getOccurrences() + 1);
+//            }
+//        }
 
         //output top 2 journeys by occurrence
         List<Map.Entry> ordered = logMap.entrySet()
@@ -59,9 +70,9 @@ public class LogAnalyser {
                 .limit(10)
                 .collect(Collectors.toList());
 
-        for (Map.Entry<Integer, Log> map : ordered) {
-            System.out.println(map.getValue().getPageJourney().printList() + String.format("[%d]", map.getValue().getOccurrences()));
-        }
+//        for (Map.Entry<Integer, Log> map : ordered) {
+//            System.out.println(map.getValue().getPageJourney().printList() + String.format("[%d]", map.getValue().getOccurrences()));
+//        }
 
         System.out.println("Completed Log Analyser");
     }
