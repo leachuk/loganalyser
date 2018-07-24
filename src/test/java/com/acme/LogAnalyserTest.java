@@ -84,7 +84,7 @@ public class LogAnalyserTest {
 	}
 
 	@Test
-	public void resultsPrintFormatted() {
+	public void resultsPrintFormattedInAscOrder() {
 		LogProcessor logProcessor = new LogProcessorBuilder(logItemList)
 				.limit(3)
 				.pageCount(3)
@@ -94,5 +94,14 @@ public class LogAnalyserTest {
 		List<Map.Entry<Integer, Log>> ordered = logProcessor.getOrderedList();
 
 		assertThat(ordered.get(0).getValue().getPageJourney().printList(), is("(login -> subscriber -> /)"));
+	}
+
+	@Test
+	public void defaultsUsedIfBuilderOptionsNotSet() {
+		LogProcessor logProcessor = new LogProcessorBuilder(logItemList).build();
+
+		List<Map.Entry<Integer, Log>> ordered = logProcessor.getOrderedList();
+
+		assertThat(ordered.get(0).getValue().getPageJourney().printList(), is("(/ -> login -> subscriber)"));
 	}
 }

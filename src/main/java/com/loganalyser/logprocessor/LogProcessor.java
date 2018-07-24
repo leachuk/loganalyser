@@ -32,7 +32,7 @@ public class LogProcessor {
 		this.pageCount = pageCount;
 	}
 	
-	public Map<Integer, Log> doProcessLogData() {
+	private Map<Integer, Log> doProcessLogData() {
 		Map<String, List<LogEntryItem>> dataStore = data.collect(groupingBy(LogEntryItem::getUser));
 		Map<Integer, Log> logMap = new HashMap<>();
 		for (Map.Entry<String, List<LogEntryItem>> user : dataStore.entrySet()) {
