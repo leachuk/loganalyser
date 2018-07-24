@@ -53,6 +53,4 @@ public class LogAnalyser {
 
         return logItemList;
     }
-
-
 }
