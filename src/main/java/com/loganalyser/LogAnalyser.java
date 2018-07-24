@@ -55,15 +55,14 @@ public class LogAnalyser {
         }
 
         //output top 2 journeys by occurrence
-        List ordered = logMap.entrySet()
+        List<Map.Entry> ordered = logMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue((o1, o2) -> o2.getOccurrences().compareTo(o1.getOccurrences())))
                 .limit(10)
                 .collect(Collectors.toList());
 
-        for (int i=0; i < ordered.size(); i++) {
-            Log log = ((HashMap.Entry<Integer, Log>) ordered.get(i)).getValue();
-            System.out.println(log.getPageJourney().printList());
+        for (Map.Entry<Integer, Log> map : ordered) {
+            System.out.println(map.getValue().getPageJourney().printList());
         }
 
         System.out.println("Completed Log Analyser");
