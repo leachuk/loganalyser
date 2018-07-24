@@ -1,4 +1,4 @@
-package com.acme;
+package com.loganalyser;
 
 import com.loganalyser.logmodel.Log;
 import com.loganalyser.logmodel.LogEntryItem;
