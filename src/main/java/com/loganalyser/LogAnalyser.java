@@ -4,25 +4,32 @@ import com.loganalyser.logmodel.Log;
 import com.loganalyser.logmodel.LogEntryItem;
 import com.loganalyser.logmodel.LogEntryList;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 
 public class LogAnalyser {
     private static final int SEQUENTIAL_PAGE_COUNT = 3;
+    private static final int LIST_LIMIT = 10;
     
     public static void main(String[] args) {
         System.out.println("================== Welcome to the Log Analyser ==================");
         
-        Map<String, List<LogEntryItem>> dataStore = getSampleData().collect(Collectors.groupingBy(LogEntryItem::getUser));
+        Map<String, List<LogEntryItem>> dataStore = getSampleData().collect(groupingBy(LogEntryItem::getUser));
         
         Map<Integer, Log> logMap = new HashMap<>();
         for (Map.Entry<String, List<LogEntryItem>> user : dataStore.entrySet()) {
             for (int i = 0; i <= user.getValue().size() - SEQUENTIAL_PAGE_COUNT; i++){
                 Map<String, List<String>> tempPageList = subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT)
                                                          .stream()
-                                                         .collect(Collectors.groupingBy(LogEntryItem::getUser,
-                                                            Collectors.mapping(LogEntryItem::getPage, Collectors.toList())));
+                                                         .collect(groupingBy(LogEntryItem::getUser,
+                                                            mapping(LogEntryItem::getPage, toList())));
                
                 if (!logMap.containsKey(tempPageList.get(user.getKey()).hashCode())) {
                     LogEntryList logEntryList = new LogEntryList(tempPageList.get(user.getKey()));
@@ -39,8 +46,8 @@ public class LogAnalyser {
         List<Map.Entry> ordered = logMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue((o1, o2) -> o2.getOccurrences().compareTo(o1.getOccurrences())))
-                .limit(10)
-                .collect(Collectors.toList());
+                .limit(LIST_LIMIT)
+                .collect(toList());
 
         for (Map.Entry<Integer, Log> map : ordered) {
             System.out.println(map.getValue().getPageJourney().printList() + String.format("\t[%d]", map.getValue().getOccurrences()));
