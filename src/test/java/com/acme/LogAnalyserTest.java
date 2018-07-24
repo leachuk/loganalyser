@@ -102,6 +102,8 @@ public class LogAnalyserTest {
 
 		List<Map.Entry<Integer, Log>> ordered = logProcessor.getOrderedList();
 
+		assertThat(ordered.size(), is(3));
+		assertThat(ordered.get(0).getValue().getOccurrences(), is(3));
 		assertThat(ordered.get(0).getValue().getPageJourney().printList(), is("(/ -> login -> subscriber)"));
 	}
 }
