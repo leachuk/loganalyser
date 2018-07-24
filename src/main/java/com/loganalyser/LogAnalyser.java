@@ -17,8 +17,8 @@ public class LogAnalyser {
         System.out.println("================== Welcome to the Log Analyser ==================");
     
         LogProcessor logProcessor = new LogProcessorBuilder(getSampleData())
-                                        .limit(3)
-                                        .pageCount(3)
+                                        .limit(LIST_LIMIT)
+                                        .pageCount(SEQUENTIAL_PAGE_COUNT)
                                         .isDescOrder(true)
                                         .build();
         
