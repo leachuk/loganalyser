@@ -21,7 +21,7 @@ public class LogEntryList {
 	public String printList() {
 		String result = this.getLogEntryList().stream()
 						.map(o -> String.valueOf(o))
-						.collect(Collectors.joining("->", "(", ")")).toString();
+						.collect(Collectors.joining(" -> ", "(", ")")).toString();
 
 		return result;
 	}
