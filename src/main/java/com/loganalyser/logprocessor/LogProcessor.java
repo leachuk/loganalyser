@@ -33,14 +33,11 @@ public class LogProcessor {
 	}
 	
 	public Map<Integer, Log> doProcessLogData() {
-		final int SEQUENTIAL_PAGE_COUNT = this.pageCount;
-
-
 		Map<String, List<LogEntryItem>> dataStore = data.collect(groupingBy(LogEntryItem::getUser));
 		Map<Integer, Log> logMap = new HashMap<>();
 		for (Map.Entry<String, List<LogEntryItem>> user : dataStore.entrySet()) {
-			for (int i = 0; i <= user.getValue().size() - SEQUENTIAL_PAGE_COUNT; i++){
-				Map<String, List<String>> tempPageList = subList(user.getValue(), i,SEQUENTIAL_PAGE_COUNT)
+			for (int i = 0; i <= user.getValue().size() - this.pageCount; i++){
+				Map<String, List<String>> tempPageList = subList(user.getValue(), i, this.pageCount)
 																								 .stream()
 																								 .collect(groupingBy(LogEntryItem::getUser,
 																								 mapping(LogEntryItem::getPage, toList())));
@@ -64,7 +61,7 @@ public class LogProcessor {
 		return doProcessLogData().entrySet()
 					.stream()
 					.sorted(comparingByValue((o1, o2) -> this.isDescOrder ? o2.getOccurrences().compareTo(o1.getOccurrences())
-																													 : o1.getOccurrences().compareTo(o2.getOccurrences())))
+																													 			: o1.getOccurrences().compareTo(o2.getOccurrences())))
 					.limit(this.limit)
 					.collect(toList());
 	}
